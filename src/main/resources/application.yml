@@ -5,3 +5,5 @@ spring:
   config:
     import:
       - security/application-aws.yml
+    activate:
+      on-profile: local
