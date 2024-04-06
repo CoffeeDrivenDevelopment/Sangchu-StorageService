@@ -6,6 +6,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public record FilesRequest(
 	@JsonProperty("file_sources")
-	List<String> fileSourceList
+	List<String> fileSources
 ) {
 }

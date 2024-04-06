@@ -22,9 +22,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Service
 public class StorageService {
-    private final AmazonS3Client amazonS3Client;
-    @Value("${cloud.aws.s3.bucket}")
-    private String bucket;
+	private final AmazonS3Client amazonS3Client;
+	@Value("${cloud.aws.s3.bucket}")
+	private String bucket;
 	@Value(("${cloud.aws.path}"))
 	private String awsPath;
 
@@ -40,7 +40,7 @@ public class StorageService {
 
 	public FilesResponse saveFiles(List<MultipartFile> files) throws IOException {
 		List<String> fileSourceList = new ArrayList<>();
-		for(MultipartFile file : files){
+		for (MultipartFile file : files) {
 			String filename = UUIDFactory.generateUUID();
 			String extension = StringUtils.getFilenameExtension(file.getOriginalFilename());
 			String fileSource = filename + "." + extension;
@@ -51,20 +51,21 @@ public class StorageService {
 			.fileSourceList(fileSourceList)
 			.build();
 	}
-    public void deleteFile(FileRequest file) {
-        amazonS3Client.deleteObject(bucket, file.filesource());
-    }
 
-    public void deleteFiles(FilesRequest files) {
-        for (String filesource : files.fileSourceList()) {
-            amazonS3Client.deleteObject(bucket, filesource);
-        }
-    }
+	public void deleteFile(FileRequest file) {
+		amazonS3Client.deleteObject(bucket, file.fileSource());
+	}
+
+	public void deleteFiles(FilesRequest files) {
+		for (String filesource : files.fileSources()) {
+			amazonS3Client.deleteObject(bucket, filesource);
+		}
+	}
 
 	private ObjectMetadata getObjectMetadata(MultipartFile file) {
-        ObjectMetadata metadata = new ObjectMetadata();
-        metadata.setContentType(file.getContentType());
-        metadata.setContentLength(file.getSize());
-        return metadata;
-    }
+		ObjectMetadata metadata = new ObjectMetadata();
+		metadata.setContentType(file.getContentType());
+		metadata.setContentLength(file.getSize());
+		return metadata;
+	}
 }
